@@ -1,26 +1,601 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* PersonaFlow Design Tokens — defaults (blue-purple), overridden by ThemeProvider */
+  --background: #070A18;
+  --foreground: #F8FAFC;
+  --card: #0F172A;
+  --card-foreground: #F8FAFC;
+  --muted: #1E293B;
+  --muted-foreground: #94A3B8;
+  --border: rgba(255, 255, 255, 0.12);
+  --primary: #7C3AED;
+  --primary-foreground: #FFFFFF;
+  --secondary: #1E293B;
+  --secondary-foreground: #CBD5E1;
+  --accent: #22D3EE;
+  --accent-foreground: #FFFFFF;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+
+  /* PersonaFlow accent tokens */
+  --pf-purple: #7C3AED;
+  --pf-indigo: #6366F1;
+  --pf-blue: #60A5FA;
+  --pf-pink: #F0ABFC;
+  --pf-cyan: #22D3EE;
+  --pf-navy: #070A18;
+  --pf-panel: #0F172A;
+
+  /* Glass morphism */
+  --pf-glass: rgba(255, 255, 255, 0.06);
+  --pf-glass-border: rgba(255, 255, 255, 0.15);
+  --pf-glass-hover: rgba(255, 255, 255, 0.10);
+
+  /* Glow colors */
+  --pf-glow-purple: rgba(124, 58, 237, 0.30);
+  --pf-glow-cyan: rgba(34, 211, 238, 0.25);
+  --pf-glow-pink: rgba(240, 171, 252, 0.20);
+
+  /* Misc */
+  --pf-selection: rgba(124, 58, 237, 0.30);
+  --pf-text-highlight: #C084FC;
+  --pf-btn-shadow: rgba(99, 102, 241, 0.35);
+  --pf-option-hover: rgba(255, 255, 255, 0.06);
+  --pf-ai-badge-bg: rgba(124, 58, 237, 0.12);
+  --pf-ai-badge-border: rgba(124, 58, 237, 0.25);
+  --pf-ai-bubble-bg: rgba(99, 102, 241, 0.10);
+  --pf-ai-bubble-border: rgba(99, 102, 241, 0.25);
+  --pf-progress-glow: rgba(34, 211, 238, 0.50);
+  --pf-grid-line: rgba(34, 211, 238, 0.04);
+  --pf-star-dot: rgba(255, 255, 255, 0.10);
+  --pf-scrollbar-thumb: rgba(255, 255, 255, 0.10);
+  --pf-scrollbar-thumb-hover: rgba(255, 255, 255, 0.18);
+
+  /* Organic shadow tokens */
+  --pf-shadow-soft: rgba(124, 58, 237, 0.12);
+  --pf-shadow-card: rgba(124, 58, 237, 0.06), rgba(0, 0, 0, 0.15);
+  --pf-shadow-glow: rgba(124, 58, 237, 0.18);
+
+  /* Radii */
+  --radius: 12px;
+  --radius-sm: 6px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-2xl: 32px;
+  --radius-pill: 9999px;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-pf-purple: var(--pf-purple);
+  --color-pf-indigo: var(--pf-indigo);
+  --color-pf-blue: var(--pf-blue);
+  --color-pf-pink: var(--pf-pink);
+  --color-pf-cyan: var(--pf-cyan);
+  --radius: var(--radius);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-2xl: var(--radius-2xl);
+  --radius-pill: var(--radius-pill);
+  --font-sans: var(--font-inter);
+  --font-mono: ui-monospace, SFMono-Regular, monospace;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== PersonaFlow Brand Gradients ===== */
+@utility gradient-brand {
+  background: linear-gradient(135deg, var(--pf-purple) 0%, var(--pf-indigo) 50%, var(--pf-cyan) 100%);
+}
+
+@utility gradient-brand-text {
+  background: linear-gradient(135deg, var(--pf-text-highlight) 0%, var(--pf-cyan) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@utility gradient-cta {
+  background: linear-gradient(135deg, var(--pf-purple) 0%, var(--pf-indigo) 50%, var(--pf-cyan) 100%);
+  box-shadow: 0 12px 40px var(--pf-btn-shadow);
+}
+
+@utility gradient-purple-cyan {
+  background: linear-gradient(135deg, var(--pf-purple) 0%, var(--pf-cyan) 100%);
+}
+
+@utility gradient-indigo-pink {
+  background: linear-gradient(135deg, var(--pf-indigo) 0%, var(--pf-pink) 100%);
+}
+
+@utility gradient-cyan-blue {
+  background: linear-gradient(135deg, var(--pf-cyan) 0%, var(--pf-blue) 100%);
+}
+
+/* ===== Organic Blob Cards ===== */
+@utility blob-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 30% 70% 70% 30% / 28% 30% 70% 72%;
+  box-shadow: var(--pf-shadow-card);
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.blob-card:hover {
+  border-color: color-mix(in srgb, var(--primary) 40%, transparent);
+  box-shadow: var(--pf-shadow-soft), var(--pf-shadow-glow);
+  transform: translateY(-3px);
+}
+
+@utility blob-card-alt {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 70% 30% 30% 70% / 70% 30% 70% 30%;
+  box-shadow: var(--pf-shadow-card);
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.blob-card-alt:hover {
+  border-color: color-mix(in srgb, var(--primary) 40%, transparent);
+  box-shadow: var(--pf-shadow-soft), var(--pf-shadow-glow);
+  transform: translateY(-3px);
+}
+
+@utility blob-card-subtle {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 40% 60% 55% 45% / 45% 50% 50% 55%;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+}
+.blob-card-subtle:hover {
+  box-shadow: var(--pf-shadow-card);
+  transform: translateY(-2px);
+}
+
+/* ===== Glass Morphism (Navbar only) ===== */
+@utility glass {
+  background: var(--pf-glass);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--pf-glass-border);
+}
+
+@utility glass-light {
+  background: var(--pf-glass-hover);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--pf-glass-border);
+}
+
+@utility glass-card {
+  background: var(--pf-glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--pf-glass-border);
+  border-radius: 24px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+}
+
+/* ===== Buttons ===== */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.75rem;
+  background: linear-gradient(135deg, var(--pf-purple) 0%, var(--pf-indigo) 50%, var(--pf-cyan) 100%);
+  color: #FFFFFF;
+  font-weight: 600;
+  border-radius: 9999px;
+  box-shadow: 0 12px 40px var(--pf-btn-shadow);
+  transition: all 0.3s ease;
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 50px var(--pf-btn-shadow);
+  filter: brightness(1.1);
+}
+.btn-primary:active {
+  transform: scale(0.97);
+}
+
+.btn-glass {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--pf-glass);
+  backdrop-filter: blur(12px);
+  color: var(--foreground);
+  font-weight: 500;
+  border-radius: 9999px;
+  border: 1px solid var(--pf-glass-border);
+  transition: all 0.3s ease;
+}
+.btn-glass:hover {
+  background: var(--pf-glass-hover);
+  border-color: var(--pf-glass-border);
+  filter: brightness(1.3);
+}
+
+/* ===== Chip Tags ===== */
+@utility chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  background: var(--pf-glass);
+  border: 1px solid var(--pf-glass-border);
+  color: var(--secondary-foreground);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+.chip:hover {
+  background: var(--pf-glass-hover);
+  border-color: var(--pf-glass-border);
+  filter: brightness(1.3);
+  transform: translateY(-1px);
+}
+
+@utility chip-purple {
+  background: color-mix(in srgb, var(--pf-purple) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--pf-purple) 30%, transparent);
+  color: var(--pf-text-highlight);
+}
+
+@utility chip-cyan {
+  background: color-mix(in srgb, var(--pf-cyan) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--pf-cyan) 30%, transparent);
+  color: var(--pf-cyan);
+}
+
+@utility chip-pink {
+  background: color-mix(in srgb, var(--pf-pink) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--pf-pink) 30%, transparent);
+  color: var(--pf-pink);
+}
+
+@utility chip-indigo {
+  background: color-mix(in srgb, var(--pf-indigo) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--pf-indigo) 30%, transparent);
+  color: var(--pf-indigo);
+}
+
+/* ===== AI Badge ===== */
+@utility ai-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  background: var(--pf-ai-badge-bg);
+  border: 1px solid var(--pf-ai-badge-border);
+  color: var(--pf-text-highlight);
+}
+
+/* ===== Organic Option Cards (Questionnaire) ===== */
+@utility option-blob {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 1.125rem 1.5rem;
+  border-radius: 20% 80% 75% 25% / 30% 35% 65% 70%;
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.option-blob:hover {
+  border-color: color-mix(in srgb, var(--primary) 50%, transparent);
+  box-shadow: var(--pf-shadow-soft);
+  transform: translateX(4px);
+}
+.option-blob-selected {
+  border-color: color-mix(in srgb, var(--primary) 60%, transparent) !important;
+  background: color-mix(in srgb, var(--primary) 8%, var(--card)) !important;
+  box-shadow: var(--pf-shadow-soft), var(--pf-shadow-glow) !important;
+  transform: translateX(6px) scale(1.01);
+}
+
+/* ===== Old Option Cards (deprecated, kept for compat) ===== */
+@utility option-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 1.125rem 1.5rem;
+  border-radius: 20px;
+  background: var(--pf-glass);
+  border: 1px solid var(--pf-glass-border);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.option-card:hover {
+  background: var(--pf-option-hover);
+  filter: brightness(1.3);
+  transform: translateY(-2px);
+}
+
+@utility option-card-selected {
+  background: color-mix(in srgb, var(--pf-purple) 12%, transparent) !important;
+  border: 1.5px solid color-mix(in srgb, var(--pf-purple) 50%, transparent) !important;
+  box-shadow: 0 0 30px var(--pf-glow-purple);
+  transform: scale(1.01);
+}
+
+/* ===== AI Feedback Bubble ===== */
+@utility ai-bubble {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  border-radius: 16px;
+  background: var(--pf-ai-bubble-bg);
+  border: 1px solid var(--pf-ai-bubble-border);
+  backdrop-filter: blur(12px);
+}
+
+/* ===== Glow Effects ===== */
+@utility glow-purple {
+  box-shadow: 0 0 60px var(--pf-glow-purple), 0 0 120px var(--pf-glow-purple);
+}
+
+@utility glow-cyan {
+  box-shadow: 0 0 40px var(--pf-glow-cyan);
+}
+
+@utility glow-pink {
+  box-shadow: 0 0 40px var(--pf-glow-pink);
+}
+
+/* ===== Shadow Utilities ===== */
+@utility shadow-primary-glow {
+  box-shadow: 0 0 30px var(--pf-glow-purple);
+}
+
+@utility shadow-accent-glow {
+  box-shadow: 0 0 30px var(--pf-glow-cyan);
+}
+
+/* ===== Progress Bar ===== */
+@utility progress-glow {
+  box-shadow: 0 0 8px var(--pf-progress-glow);
+}
+
+/* ===== Section Containers ===== */
+.section-padding {
+  padding-left: 5rem;
+  padding-right: 5rem;
+}
+
+@media (max-width: 1024px) {
+  .section-padding {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .section-padding {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* ===== Background Patterns ===== */
+@utility bg-stars {
+  background-image:
+    radial-gradient(1px 1px at 20% 15%, var(--pf-star-dot), transparent),
+    radial-gradient(1px 1px at 40% 35%, var(--pf-star-dot), transparent),
+    radial-gradient(1.5px 1.5px at 60% 25%, var(--pf-star-dot), transparent),
+    radial-gradient(1px 1px at 80% 40%, var(--pf-star-dot), transparent),
+    radial-gradient(2px 2px at 10% 60%, var(--pf-star-dot), transparent),
+    radial-gradient(1px 1px at 70% 70%, var(--pf-star-dot), transparent),
+    radial-gradient(1.5px 1.5px at 90% 80%, var(--pf-star-dot), transparent);
+}
+
+@utility bg-dots {
+  background-image: radial-gradient(circle, var(--pf-star-dot) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+@utility bg-grid {
+  background-image:
+    linear-gradient(var(--pf-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--pf-grid-line) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+@utility bg-blob-decor {
+  position: absolute;
+  border-radius: 60% 40% 55% 45% / 55% 45% 55% 45%;
+  filter: blur(80px);
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* ===== Wavy Divider ===== */
+@utility divider-wavy {
+  width: 100%;
+  height: 6px;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 10px,
+    var(--border) 10px,
+    var(--border) 14px
+  );
+  border-radius: 3px;
+  mask-image: radial-gradient(circle at 50% 50%, black 60%, transparent 100%);
+}
+
+/* ===== Organic Progress Dots ===== */
+@utility progress-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 60% 40% 55% 45%;
+  background: var(--border);
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.progress-dot.active {
+  background: var(--primary);
+  box-shadow: 0 0 10px var(--pf-shadow-soft);
+  transform: scale(1.3);
+  border-radius: 45% 55% 50% 50%;
+}
+.progress-dot.done {
+  background: color-mix(in srgb, var(--primary) 60%, transparent);
+}
+
+/* ===== Blob (Hero decor element) ===== */
+@utility blob-float {
+  animation: blobMorph 8s ease-in-out infinite;
+}
+
+/* ===== Keyframe Animations ===== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes floatUp {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes orbPulse {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.08); opacity: 1; }
+}
+
+@keyframes blobMorph {
+  0%, 100% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    border-radius: 40% 60% 70% 30% / 30% 60% 40% 70%;
+  }
+  50% {
+    border-radius: 30% 70% 55% 45% / 70% 40% 30% 60%;
+    transform: rotate(3deg) scale(1.05);
+  }
+  75% {
+    border-radius: 65% 35% 45% 55% / 40% 65% 55% 35%;
+  }
+}
+
+@utility animate-fade-in {
+  animation: fadeIn 0.5s ease-out both;
+}
+
+@utility animate-slide-up {
+  animation: slideUp 0.6s ease-out both;
+}
+
+@utility animate-scale-in {
+  animation: scaleIn 0.35s ease-out both;
+}
+
+@utility animate-float {
+  animation: floatUp 3s ease-in-out infinite;
+}
+
+@utility animate-pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@utility animate-orb {
+  animation: orbPulse 3s ease-in-out infinite;
+}
+
+@utility animate-blob {
+  animation: blobMorph 8s ease-in-out infinite;
+}
+
+@utility animate-shimmer {
+  background: linear-gradient(90deg, transparent, var(--pf-glass), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+/* ===== Custom Scrollbar ===== */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--pf-scrollbar-thumb);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--pf-scrollbar-thumb-hover);
+}
+
+/* ===== Selection ===== */
+::selection {
+  background: var(--pf-selection);
+  color: #FFFFFF;
 }
