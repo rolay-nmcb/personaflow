@@ -1,17 +1,34 @@
-# Architecture Decision Records
+# 架构决策记录 (ADR)
 
-PersonaFlow 项目的关键技术决策记录。
+记录 PersonaFlow 项目从零到现在的所有重要技术决策。每篇文档包含：背景 → 决策 → 备选方案 → 后果。
 
-| # | 标题 | 决策摘要 |
+## 决策索引
+
+| # | 决策 | 一句话 |
 |---|---|---|
-| 001 | [技术栈选型](001-tech-stack-nextjs-supabase.md) | Next.js 16 + Supabase (PostgreSQL + Auth + Storage + Edge Functions) 作为全栈基础 |
-| 002 | [AI 双供应商策略](002-dual-ai-providers.md) | DeepSeek 做文本生成，豆包(seedream) 做图像生成，各取所长 |
-| 003 | [边缘函数架构](003-edge-functions-architecture.md) | 6 个 Supabase Edge Functions 替代传统后端，零自建服务器 |
-| 004 | [CSS 变量主题系统](004-css-variable-theming.md) | CSS 自定义属性 + React Context + inline script 防闪烁，5 套主题可切换 |
-| 005 | [匿名问答流转](005-anonymous-quiz-flow.md) | 公开问卷匿名提交 → 同步完成全流程 AI 分析 → 完整体验，注册可选 |
-| 006 | [图像重试策略](006-image-retry-resilience.md) | 90s 超时 + 指数退避重试 3 次 + Promise.allSettled 并行，解决跨境 TCP 超时 |
-| 007 | [有机 blob 设计系统](007-organic-blob-design-system.md) | 有机 blob 形状 + 彩色软影 + emoji/数字替代 sparkle 图标，消除 AI 模板感 |
+| [001](001-tech-stack-nextjs-supabase.md) | **全栈选型** | Next.js 16 + Supabase 一人团队最高效的技术组合 |
+| [002](002-dual-ai-providers.md) | **AI 供应商** | DeepSeek 管文本、豆包管图像，各自用最擅长的模型 |
+| [003](003-edge-functions-architecture.md) | **后端架构** | 6 个 Edge Function 完成全部后端逻辑，零自建服务器 |
+| [004](004-css-variable-theming.md) | **主题系统** | CSS 变量 + React Context 驱动 5 套主题实时切换 |
+| [005](005-anonymous-quiz-flow.md) | **匿名流转** | 分享链接答题不用登录，答完直接看完整画像 |
+| [006](006-image-retry-resilience.md) | **图像重试** | 指数退避 + 并行生成，解决豆包跨境网络超时 |
+| [007](007-organic-blob-design-system.md) | **设计语言** | 有机 blob 形状替代玻璃拟态，消除"A I 味" |
 
-## 格式
+## 决策时间线
 
-采用简化 MADR 格式：背景 → 决策 → 备选方案 → 后果。
+```
+2026-03    2026-04             2026-05
+   │          │                   │
+   ├─ 001 栈  ├─ 004 主题系统      ├─ 007 有机设计
+   ├─ 002 AI ├─ 005 匿名流转      └─ 006 重试完善
+   └─ 003 函数 └─ 006 重试初版
+```
+
+## 格式说明
+
+采用简化 [MADR](https://adr.github.io/madr/) 格式，每篇包含四个部分：
+
+- **背景** — 当时面临什么问题、有什么约束
+- **决策** — 做了什么选择、具体怎么实现的
+- **备选方案** — 考虑过哪些其他方案、为什么没选
+- **后果** — 正面收益、负面影响、回头看得到的经验
